@@ -1,0 +1,51 @@
+<div class="container">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-md-8">
+            <div class="card mt-5">
+                <div class="card-header">
+                    <h5>Register</h5>
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="regisForm" (ngSubmit)="register()" >
+                        <div class="form-group">
+                            <label>First Name</label>
+                            <input type="text" class="form-control"
+                            formControlName="firstName" >
+                        </div>
+                        <div class="form-group">
+                            <label>Last Name</label>
+                            <input type="text" class="form-control" formControlName="lastName">
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control"  (focus)="reset()"
+                            formControlName="email" [class.is-invalid]="isFieldValid('email')">
+                            <small *ngIf="isFieldValid('email')" class="text-danger">{{getErrorMsg('email')}}</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Username</label>
+                            <input type="text" class="form-control"  (focus)="reset()"
+                                formControlName="username" [class.is-invalid]="isFieldValid('username')">
+                            <small *ngIf="isFieldValid('username')" class="text-danger">{{getErrorMsg('username', 5)}}</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control"  (focus)="reset()"
+                            formControlName="password" [class.is-invalid]="isFieldValid('password')">
+                            <small *ngIf="isFieldValid('password')" class="text-danger">{{getErrorMsg('password', 8)}}</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" class="form-control"
+                                (focus)="reset()" formControlName="confirmPassword"
+                                [class.is-invalid]="regisForm.errors?.misMatch || isFieldValid('confirmPassword')">
+                            <small class="text-danger" 
+                                *ngIf="regisForm.errors?.misMatch || isFieldValid('confirmPassword')">passwords do not match</small>
+                        </div>
+                        <button class="btn btn-primary float-right" type="submit">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

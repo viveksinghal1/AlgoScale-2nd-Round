@@ -44,6 +44,12 @@ export class AuthService {
     this._router.navigate(['/login']);
   }
 
+  getUsers(): any {
+    return this.http.get<any>(this.header+"/users").pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
   errorHandler(error: HttpErrorResponse) {
     return throwError(error);
   }
