@@ -1449,7 +1449,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
               _this6._router.navigate(['/dashboard']);
             }, function (err) {
-              return console.log(err.error);
+              _this6.error = err.error, console.log(err.error);
             });
           }
         }

@@ -60,7 +60,10 @@ export class RegisterComponent implements OnInit {
           localStorage.setItem('username', res.username);
           this._router.navigate(['/dashboard']);
         },
-        err => console.log(err.error)
+        err => {
+          this.error = err.error,
+          console.log(err.error)
+        }
       )
     }
   }

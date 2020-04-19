@@ -751,7 +751,10 @@ let RegisterComponent = class RegisterComponent {
                 localStorage.setItem('token', res.idToken);
                 localStorage.setItem('username', res.username);
                 this._router.navigate(['/dashboard']);
-            }, err => console.log(err.error));
+            }, err => {
+                this.error = err.error,
+                    console.log(err.error);
+            });
         }
     }
     ngOnInit() {
