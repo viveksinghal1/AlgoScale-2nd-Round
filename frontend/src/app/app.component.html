@@ -13,13 +13,16 @@
 
     <ul class="navbar-nav ml-auto">
       <li class="nav-item" *ngIf="!_authService.isLoggedIn()">
-        <a class="nav-link btn btn-primary" routerLink="/login" routerLinkActive="active">Login</a>
+        <a class="nav-link btn btn-primary text-light" routerLink="/login" routerLinkActive="active">Login</a>
       </li>
       <li class="nav-item" *ngIf="!_authService.isLoggedIn()">
         <a class="nav-link" routerLink="/register" routerLinkActive="active">Register</a>
       </li>
       <li class="nav-item" *ngIf="_authService.isLoggedIn()">
-        <a class="nav-link btn btn-primary" style="cursor: pointer;" (click)="_authUserService.logoutUser()">Logout</a>
+        <a class="nav-link" routerLink="/dashboard">{{username}}</a>
+      </li>
+      <li class="nav-item" *ngIf="_authService.isLoggedIn()">
+        <a class="nav-link btn btn-primary" style="cursor: pointer; color: white;" (click)="_authService.logoutUser()">Logout</a>
       </li>
     </ul>
   </div>

@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs';
+import { throwError, Observable } from 'rxjs';
 import  { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { User } from '../user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -44,8 +45,14 @@ export class AuthService {
     this._router.navigate(['/login']);
   }
 
-  getUsers(): any {
-    return this.http.get<any>(this.header+"/users").pipe(
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[]>(this.header+"/users").pipe(
+      catchError(this.errorHandler)
+    )
+  }
+
+  deleteUser(id): Observable<User[]> {
+    return this.http.delete<User[]>(this.header+"/users/"+id).pipe(
       catchError(this.errorHandler)
     )
   }

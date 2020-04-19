@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from './service/auth.service';
 
 @Component({
@@ -6,8 +6,12 @@ import { AuthService } from './service/auth.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
-  title = 'frontend';
+export class AppComponent implements OnInit {
+  username = "";
 
   constructor(private _authService: AuthService) {}
+
+  ngOnInit() {
+    this.username = localStorage.getItem("username");
+  }
 }
