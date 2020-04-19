@@ -28,10 +28,9 @@ router.post("/register", async function(req, res){
             let registeredAdmin =  await admin.save();
             try {
                 let payload = { subject: registeredAdmin._id };
-                let token = jwt.sign(payload, RSA_PRIVATE_KEY, { expiresIn: '86400s', algorithm: 'RS256' });
+                let token = jwt.sign(payload, RSA_PRIVATE_KEY, { algorithm: 'RS256' });
                 res.status(201).json({
                     idToken: token,
-                    expiresIn: 86400,
                     username: registeredAdmin.username
                 });
             } catch(err) {
@@ -57,10 +56,9 @@ router.post("/login", async function(req, res){
             } else {
                 try {
                     let payload = { subject: foundAdmin._id };
-                    let token = jwt.sign(payload, RSA_PRIVATE_KEY, { expiresIn: '86400s', algorithm: 'RS256' });
+                    let token = jwt.sign(payload, RSA_PRIVATE_KEY, {algorithm: 'RS256' });
                     res.status(200).json({
                         idToken: token,
-                        expiresIn: 86400,
                         username: foundAdmin.username
                     });
                 } catch(err) {
