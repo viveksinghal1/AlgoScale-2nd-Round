@@ -12,7 +12,8 @@ export class DashboardComponent implements OnInit {
   users: User[] = [];
 
   error = "";
-  success = ""
+  success = "";
+  btnClicked = false;
   
 
   seedDB() {
@@ -20,6 +21,18 @@ export class DashboardComponent implements OnInit {
       res => this.users = res,
       err => console.log(err)
     );
+  }
+
+  showUsers() {
+    this._authService.getUsers().subscribe(
+      res => this.users = res,
+      err => console.log(err)
+    )
+    this.btnClicked = true;
+  }
+
+  hideUsers() {
+    this.btnClicked = false;
   }
 
   delete(id) {
