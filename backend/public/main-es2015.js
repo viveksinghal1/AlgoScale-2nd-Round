@@ -45,7 +45,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"container\">\n    <div class=\"row justify-content-center align-items-center\">\n        <div class=\"col-md-8\">\n            <div class=\"mt-4 d-flex justify-content-around\" style=\"background-color: rgba(180, 180, 180, 0.05);\" >\n                <button class=\"btn btn-primary\" (click)=\"showUsers()\">Show Users</button>\n                <button class=\"btn btn-secondary\" (click)=\"hideUsers()\">Hide Users</button>\n                <button (click)=\"seedDB()\" class=\"btn btn-success\">Seed Db</button>\n            </div>\n            <div class=\"mt-2 d-flex flex-column align-items-center\">\n                <small class=\"text-muted\">*SeedDB works when show Users btn is clicked for seeding the database</small>\n                <small class=\"text-muted\">*Hold and Scroll right the table on small devices to view full table</small>\n            \n            </div>\n            <div *ngIf=\"btnClicked\" class=\"table-responsive-md\">\n                <table class=\"table table-striped table-dark table-bordered table-hover mt-4\">\n                    <thead>\n                      <tr>\n                        <th scope=\"col\">#</th>\n                        <th scope=\"col\">First Name</th>\n                        <th scope=\"col\">Last Name</th>\n                        <th scope=\"col\">username</th>\n                        <th scope=\"col\">email</th>\n                        <th scope=\"col\">Ops</th>\n                      </tr>\n                    </thead>\n                    <tbody>\n                      <tr *ngFor=\"let user of users; let i=index\">\n                        <th scope=\"row\">{{i+1}}</th>\n                        <td>{{user.firstName}}</td>\n                        <td>{{user.lastName}}</td>\n                        <td>{{user.username}}</td>\n                        <td>{{user.email}}</td>\n                        <td><button class=\"btn btn-danger btn-sm\" (click)=\"delete(user._id)\">Delete</button></td>\n                      </tr>\n                    </tbody>\n                  </table>\n            </div>\n        </div>\n    </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"container\">\n    <div class=\"row justify-content-center align-items-center\">\n        <div class=\"col-md-8\">\n            <div class=\"mt-4 d-flex justify-content-around\" style=\"background-color: rgba(180, 180, 180, 0.05);\" >\n                <button (click)=\"seedDB()\" class=\"btn btn-success\">Seed Db</button>\n                <button (click)=\"viewTable()\" class=\"btn btn-primary\">View Table format</button>\n            </div>\n            <div class=\"mt-2 d-flex flex-column align-items-center\">\n                <small class=\"text-muted\">*Double click SeedDB for seeding the database</small>\n                <small class=\"text-muted\" *ngIf=\"btnClicked\">*Hold and Scroll right the table on small devices to view full table</small>\n            </div>\n            <div *ngIf=\"btnClicked\" class=\"table-responsive-md\">\n                <table class=\"table table-striped table-dark table-bordered table-hover mt-4\">\n                    <thead>\n                      <tr>\n                        <th scope=\"col\">#</th>\n                        <th scope=\"col\">First Name</th>\n                        <th scope=\"col\">Last Name</th>\n                        <th scope=\"col\">username</th>\n                        <th scope=\"col\">email</th>\n                        <th scope=\"col\">Ops</th>\n                      </tr>\n                    </thead>\n                    <tbody>\n                      <tr *ngFor=\"let user of users; let i=index\">\n                        <th scope=\"row\">{{i+1}}</th>\n                        <td>{{user.firstName}}</td>\n                        <td>{{user.lastName}}</td>\n                        <td>{{user.username}}</td>\n                        <td>{{user.email}}</td>\n                        <td><button class=\"btn btn-danger btn-sm\" (click)=\"delete(user._id)\">Delete</button></td>\n                      </tr>\n                    </tbody>\n                  </table>\n            </div>\n            <select *ngIf=\"dropdownFlag\" class=\"form-control mt-3\" [(ngModel)]=\"selectedUser\">\n                <option disabled selected>Select a user</option>\n                <option *ngFor=\"let user of users\" [ngValue]=\"user\">{{user.username+\", \"+user.email }}</option>\n            </select>\n\n            <div *ngIf=\"selectedUser.username\" class=\"mt-5 d-flex flex-column\">\n                <div class=\"d-flex justify-content-between\">\n                    <h5>First Name</h5>\n                    <p>{{selectedUser.firstName}}</p>\n                </div>\n                <div class=\"d-flex mt-2 justify-content-between\">\n                    <h5>Last Name</h5>\n                    <p>{{selectedUser.lastName}}</p>\n                </div>\n                <div class=\"d-flex mt-2 justify-content-between\">\n                    <h5>Username</h5>\n                    <p>{{selectedUser.username}}</p>\n                </div>\n                <div class=\"d-flex mt-2 justify-content-between\">\n                    <h5>Email</h5>\n                    <p>{{selectedUser.email}}</p>\n                </div>\n                <div class=\"d-flex justify-content-end\">\n                    <button class=\"btn btn-danger\" (click)=\"delete(selectedUser._id)\">Delete this user</button>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>");
 
 /***/ }),
 
@@ -71,7 +71,7 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"container\">\n    <div class=\"row justify-content-center align-items-center\">\n        <div class=\"col-md-7\">\n            <div class=\"alert alert-danger\" *ngIf = \"error\">\n                {{error}}\n            </div>\n        </div>\n        <div class=\"col-md-8\">\n            <div class=\"card mt-5\">\n                <div class=\"card-header\">\n                    <h5>Register</h5>\n                </div>\n                <div class=\"card-body\">\n                    <form [formGroup]=\"regisForm\" (ngSubmit)=\"register()\" *ngIf=\"!submitted || !allFieldsValid || error\" >\n                        <div class=\"form-group\">\n                            <label>First Name</label>\n                            <input type=\"text\" class=\"form-control\"\n                            formControlName=\"firstName\" >\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Last Name</label>\n                            <input type=\"text\" class=\"form-control\" formControlName=\"lastName\">\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Email</label>\n                            <input type=\"text\" class=\"form-control\"  (focus)=\"reset()\"\n                            formControlName=\"email\" [class.is-invalid]=\"isFieldValid('email')\">\n                            <small *ngIf=\"isFieldValid('email')\" class=\"text-danger\">{{getErrorMsg('email')}}</small>\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Username</label>\n                            <input type=\"text\" class=\"form-control\"  (focus)=\"reset()\"\n                                formControlName=\"username\" [class.is-invalid]=\"isFieldValid('username')\">\n                            <small *ngIf=\"isFieldValid('username')\" class=\"text-danger\">{{getErrorMsg('username', 5)}}</small>\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Password</label>\n                            <input type=\"password\" class=\"form-control\"  (focus)=\"reset()\"\n                            formControlName=\"password\" [class.is-invalid]=\"isFieldValid('password')\">\n                            <small *ngIf=\"isFieldValid('password')\" class=\"text-danger\">{{getErrorMsg('password', 8)}}</small>\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Confirm Password</label>\n                            <input type=\"password\" class=\"form-control\"\n                                (focus)=\"reset()\" formControlName=\"confirmPassword\"\n                                [class.is-invalid]=\"regisForm.errors?.misMatch || isFieldValid('confirmPassword')\">\n                            <small class=\"text-danger\" \n                                *ngIf=\"regisForm.errors?.misMatch || isFieldValid('confirmPassword')\">passwords do not match</small>\n                        </div>\n                        <button class=\"btn btn-primary float-right\" type=\"submit\">Register</button>\n                    </form>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>");
+/* harmony default export */ __webpack_exports__["default"] = ("<div class=\"container\">\n    <div class=\"row justify-content-center align-items-center\">\n        <div class=\"col-md-7\">\n            <div class=\"alert alert-danger\" *ngIf = \"error\">\n                {{error}}\n            </div>\n        </div>\n        <div class=\"col-md-8\">\n            <div class=\"card mt-5\">\n                <div class=\"card-header\">\n                    <h5>Register</h5>\n                </div>\n                <div class=\"card-body\">\n                    <form [formGroup]=\"regisForm\" (ngSubmit)=\"register()\" *ngIf=\"!submitted || !allFieldsValid || error\" >\n                        <div class=\"form-group\">\n                            <label>First Name</label>\n                            <input type=\"text\" class=\"form-control\"\n                            formControlName=\"firstName\" >\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Last Name</label>\n                            <input type=\"text\" class=\"form-control\" formControlName=\"lastName\">\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Email</label>\n                            <input type=\"text\" class=\"form-control\"  (focus)=\"reset()\"\n                            formControlName=\"email\" [class.is-invalid]=\"isFieldValid('email')\">\n                            <small *ngIf=\"isFieldValid('email')\" class=\"text-danger\">{{getErrorMsg('email')}}</small>\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Username</label>\n                            <input type=\"text\" class=\"form-control\"  (focus)=\"reset()\"\n                                formControlName=\"username\" [class.is-invalid]=\"isFieldValid('username')\">\n                            <small *ngIf=\"isFieldValid('username')\" class=\"text-danger\">{{getErrorMsg('username', 5)}}</small>\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Password</label>\n                            <input type=\"password\" class=\"form-control\"  (focus)=\"reset()\"\n                            formControlName=\"password\" [class.is-invalid]=\"isFieldValid('password')\">\n                            <small class=\"form-text text-muted\">*password should have at least one special character and one number</small>\n                            <small *ngIf=\"isFieldValid('password')\" class=\"text-danger\">{{getErrorMsg('password', 8)}}</small>\n                        </div>\n                        <div class=\"form-group\">\n                            <label>Confirm Password</label>\n                            <input type=\"password\" class=\"form-control\"\n                                (focus)=\"reset()\" formControlName=\"confirmPassword\"\n                                [class.is-invalid]=\"regisForm.errors?.misMatch || isFieldValid('confirmPassword')\">\n                            <small class=\"text-danger\" \n                                *ngIf=\"regisForm.errors?.misMatch || isFieldValid('confirmPassword')\">passwords do not match</small>\n                        </div>\n                        <button class=\"btn btn-primary float-right\" type=\"submit\">Register</button>\n                    </form>\n                </div>\n            </div>\n        </div>\n    </div>\n</div>");
 
 /***/ }),
 
@@ -476,7 +476,8 @@ AppModule = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
             _angular_platform_browser__WEBPACK_IMPORTED_MODULE_1__["BrowserModule"],
             _app_routing_module__WEBPACK_IMPORTED_MODULE_5__["AppRoutingModule"],
             _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClientModule"],
-            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["ReactiveFormsModule"]
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["ReactiveFormsModule"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_4__["FormsModule"]
         ],
         providers: [
             {
@@ -529,19 +530,41 @@ let DashboardComponent = class DashboardComponent {
         this.error = "";
         this.success = "";
         this.btnClicked = false;
+        this.dropdownFlag = true;
+        this.selectedUser = {
+            username: "",
+            email: "",
+            firstName: "",
+            lastName: ""
+        };
     }
     seedDB() {
         this._authService.getUsers().subscribe(res => this.users = res, err => console.log(err));
     }
-    showUsers() {
-        this._authService.getUsers().subscribe(res => this.users = res, err => console.log(err));
-        this.btnClicked = true;
-    }
-    hideUsers() {
-        this.btnClicked = false;
+    // showUsers() {
+    //   this._authService.getUsers().subscribe(
+    //     res => this.users = res,
+    //     err => console.log(err)
+    //   )
+    //   this.btnClicked = true;
+    // }
+    // hideUsers() {
+    //   this.btnClicked = false;
+    // }
+    viewTable() {
+        this.btnClicked = !this.btnClicked;
+        this.dropdownFlag = !this.dropdownFlag;
     }
     delete(id) {
-        this._authService.deleteUser(id).subscribe(res => this.users = res, err => this.error = err.error);
+        this._authService.deleteUser(id).subscribe(res => {
+            this.users = res,
+                this.selectedUser = {
+                    username: "",
+                    email: "",
+                    firstName: "",
+                    lastName: ""
+                };
+        }, err => this.error = err.error);
     }
     ngOnInit() {
         this._authService.getUsers().subscribe(res => this.users = res, err => console.log(err));
@@ -698,6 +721,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm2015/forms.js");
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm2015/router.js");
 /* harmony import */ var _service_auth_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../service/auth.service */ "./src/app/service/auth.service.ts");
+/* harmony import */ var src_app_validators_allowedname_validator__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/app/validators/allowedname.validator */ "./src/app/validators/allowedname.validator.ts");
+/* harmony import */ var src_app_validators_forbiddenName_validator__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/app/validators/forbiddenName.validator */ "./src/app/validators/forbiddenName.validator.ts");
+
+
 
 
 
@@ -731,6 +758,12 @@ let RegisterComponent = class RegisterComponent {
         else if (element.touched && errors.minlength) {
             result = "*" + field + " must be at least " + minlength + " characters long";
         }
+        else if (element.touched && errors.allowedName) {
+            result = "enter password as per given instructions";
+        }
+        else if (element.touched && errors.forbiddenName) {
+            result = errors.forbiddenName.value + " username is not allowed";
+        }
         return result;
     }
     reset() {
@@ -748,9 +781,7 @@ let RegisterComponent = class RegisterComponent {
             this._authService.register(this.regisForm.value)
                 .subscribe(res => {
                 console.log("success");
-                localStorage.setItem('token', res.idToken);
-                localStorage.setItem('username', res.username);
-                this._router.navigate(['/dashboard']);
+                this._router.navigate(['/login']);
             }, err => {
                 this.error = err.error,
                     console.log(err.error);
@@ -762,8 +793,8 @@ let RegisterComponent = class RegisterComponent {
             firstName: [""],
             lastName: [""],
             email: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].email]],
-            username: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(5)]],
-            password: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(8)]],
+            username: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(5), Object(src_app_validators_forbiddenName_validator__WEBPACK_IMPORTED_MODULE_7__["forbiddenNameValidator"])(/admin|password/)]],
+            password: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(8), Object(src_app_validators_allowedname_validator__WEBPACK_IMPORTED_MODULE_6__["allowedNameValidator"])(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)]],
             confirmPassword: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required]
         }, { validators: _validators_password_validator__WEBPACK_IMPORTED_MODULE_2__["PasswordValidator"] });
     }
@@ -950,6 +981,50 @@ TokenInterceptorService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
     })
 ], TokenInterceptorService);
 
+
+
+/***/ }),
+
+/***/ "./src/app/validators/allowedname.validator.ts":
+/*!*****************************************************!*\
+  !*** ./src/app/validators/allowedname.validator.ts ***!
+  \*****************************************************/
+/*! exports provided: allowedNameValidator */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "allowedNameValidator", function() { return allowedNameValidator; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+
+function allowedNameValidator(allowedName) {
+    return (control) => {
+        const forbidden = allowedName.test(control.value);
+        return forbidden ? null : { 'allowedName': { value: control.value } };
+    };
+}
+
+
+/***/ }),
+
+/***/ "./src/app/validators/forbiddenName.validator.ts":
+/*!*******************************************************!*\
+  !*** ./src/app/validators/forbiddenName.validator.ts ***!
+  \*******************************************************/
+/*! exports provided: forbiddenNameValidator */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "forbiddenNameValidator", function() { return forbiddenNameValidator; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+
+function forbiddenNameValidator(forbiddenName) {
+    return (control) => {
+        const forbidden = forbiddenName.test(control.value);
+        return forbidden ? { 'forbiddenName': { value: control.value } } : null;
+    };
+}
 
 
 /***/ }),

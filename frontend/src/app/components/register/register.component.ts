@@ -3,6 +3,8 @@ import { PasswordValidator } from '../../validators/password.validator';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
+import { allowedNameValidator } from 'src/app/validators/allowedname.validator';
+import { forbiddenNameValidator } from 'src/app/validators/forbiddenName.validator';
 
 
 @Component({
@@ -36,6 +38,12 @@ export class RegisterComponent implements OnInit {
     else if (element.touched && errors.minlength) {
       result = "*" + field + " must be at least " + minlength + " characters long";
     }
+    else if (element.touched && errors.allowedName) {
+      result = "enter password as per given instructions";
+    }
+    else if (element.touched && errors.forbiddenName) {
+      result = errors.forbiddenName.value + " username is not allowed";
+    }
     return result;
   }
 
@@ -56,9 +64,7 @@ export class RegisterComponent implements OnInit {
       .subscribe(
         res => {
           console.log("success");
-          localStorage.setItem('token', res.idToken);
-          localStorage.setItem('username', res.username);
-          this._router.navigate(['/dashboard']);
+          this._router.navigate(['/login']);
         },
         err => {
           this.error = err.error,
@@ -75,8 +81,8 @@ export class RegisterComponent implements OnInit {
       firstName: [""],
       lastName: [""],
       email: ["", [Validators.required, Validators.email]],
-      username: ["", [Validators.required, Validators.minLength(5)]],
-      password: ["", [Validators.required, Validators.minLength(8)]],
+      username: ["", [Validators.required, Validators.minLength(5), forbiddenNameValidator(/admin|password/)]],
+      password: ["", [Validators.required, Validators.minLength(8), allowedNameValidator(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)]],
       confirmPassword: ["", Validators.required]
     }, {validators: PasswordValidator});
   }

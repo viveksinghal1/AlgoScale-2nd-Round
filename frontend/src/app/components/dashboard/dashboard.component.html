@@ -2,14 +2,12 @@
     <div class="row justify-content-center align-items-center">
         <div class="col-md-8">
             <div class="mt-4 d-flex justify-content-around" style="background-color: rgba(180, 180, 180, 0.05);" >
-                <button class="btn btn-primary" (click)="showUsers()">Show Users</button>
-                <button class="btn btn-secondary" (click)="hideUsers()">Hide Users</button>
                 <button (click)="seedDB()" class="btn btn-success">Seed Db</button>
+                <button (click)="viewTable()" class="btn btn-primary">View Table format</button>
             </div>
             <div class="mt-2 d-flex flex-column align-items-center">
-                <small class="text-muted">*SeedDB works when show Users btn is clicked for seeding the database</small>
-                <small class="text-muted">*Hold and Scroll right the table on small devices to view full table</small>
-            
+                <small class="text-muted">*Double click SeedDB for seeding the database</small>
+                <small class="text-muted" *ngIf="btnClicked">*Hold and Scroll right the table on small devices to view full table</small>
             </div>
             <div *ngIf="btnClicked" class="table-responsive-md">
                 <table class="table table-striped table-dark table-bordered table-hover mt-4">
@@ -34,6 +32,32 @@
                       </tr>
                     </tbody>
                   </table>
+            </div>
+            <select *ngIf="dropdownFlag" class="form-control mt-3" [(ngModel)]="selectedUser">
+                <option disabled selected>Select a user</option>
+                <option *ngFor="let user of users" [ngValue]="user">{{user.username+", "+user.email }}</option>
+            </select>
+
+            <div *ngIf="selectedUser.username" class="mt-5 d-flex flex-column">
+                <div class="d-flex justify-content-between">
+                    <h5>First Name</h5>
+                    <p>{{selectedUser.firstName}}</p>
+                </div>
+                <div class="d-flex mt-2 justify-content-between">
+                    <h5>Last Name</h5>
+                    <p>{{selectedUser.lastName}}</p>
+                </div>
+                <div class="d-flex mt-2 justify-content-between">
+                    <h5>Username</h5>
+                    <p>{{selectedUser.username}}</p>
+                </div>
+                <div class="d-flex mt-2 justify-content-between">
+                    <h5>Email</h5>
+                    <p>{{selectedUser.email}}</p>
+                </div>
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-danger" (click)="delete(selectedUser._id)">Delete this user</button>
+                </div>
             </div>
         </div>
     </div>
