@@ -10,7 +10,8 @@ import { User } from '../user.model';
 })
 export class AuthService {
 
-  header = "http://localhost:3000";
+  // header = "http://localhost:3000";
+  header = "";
 
   register(user) {
     let headers = new HttpHeaders();
