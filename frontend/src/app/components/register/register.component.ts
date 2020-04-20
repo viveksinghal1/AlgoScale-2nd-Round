@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PasswordValidator } from '../../validators/password.validator';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../service/auth.service';
 import { allowedNameValidator } from 'src/app/validators/allowedname.validator';
@@ -44,6 +44,12 @@ export class RegisterComponent implements OnInit {
     else if (element.touched && errors.forbiddenName) {
       result = errors.forbiddenName.value + " username is not allowed";
     }
+    else if (element.hasError('isUsernameUnique')) {
+      result = "username already used. try another username.";
+    }
+    else if (element.hasError('isEmailUnique')) {
+      result = "email already used. try another email.";
+    }
     return result;
   }
 
@@ -74,14 +80,44 @@ export class RegisterComponent implements OnInit {
     }
   }
 
+  validateUsername(control: FormControl) {
+    const q = new Promise((resolve, reject) => {
+      setTimeout((res) => {
+        this._authService.validateUsername(control.value).subscribe(() => {
+          resolve(null);
+        }, (err) => { 
+          if (err.status===200)
+            resolve(null);
+          else
+            resolve({ 'isUsernameUnique': true }); });
+      }, 1000);
+    });
+    return q;
+  }
+
+  validateEmail(control: FormControl) {
+    const q = new Promise((resolve, reject) => {
+      setTimeout((res) => {
+        this._authService.validateEmail(control.value).subscribe(() => {
+          resolve(null);
+        }, (err) => { 
+          if (err.status===200)
+            resolve(null);
+          else
+            resolve({ 'isEmailUnique': true }); });
+      }, 1000);
+    });
+    return q;
+  }
+
   constructor(private fb: FormBuilder, private _authService: AuthService, private _router: Router) { }
 
   ngOnInit() {
     this.regisForm = this.fb.group({
       firstName: [""],
       lastName: [""],
-      email: ["", [Validators.required, Validators.email]],
-      username: ["", [Validators.required, Validators.minLength(5), forbiddenNameValidator(/admin|password/)]],
+      email: ["", [Validators.required, Validators.email], this.validateEmail.bind(this)],
+      username: ["", [Validators.required, Validators.minLength(5), forbiddenNameValidator(/admin|password/)], this.validateUsername.bind(this)],
       password: ["", [Validators.required, Validators.minLength(8), allowedNameValidator(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)]],
       confirmPassword: ["", Validators.required]
     }, {validators: PasswordValidator});

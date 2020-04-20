@@ -1444,6 +1444,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             result = "enter password as per given instructions";
           } else if (element.touched && errors.forbiddenName) {
             result = errors.forbiddenName.value + " username is not allowed";
+          } else if (element.hasError('isUsernameUnique')) {
+            result = "username already used. try another username.";
+          } else if (element.hasError('isEmailUnique')) {
+            result = "email already used. try another email.";
           }
 
           return result;
@@ -1478,13 +1482,49 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           }
         }
       }, {
+        key: "validateUsername",
+        value: function validateUsername(control) {
+          var _this6 = this;
+
+          var q = new Promise(function (resolve, reject) {
+            setTimeout(function (res) {
+              _this6._authService.validateUsername(control.value).subscribe(function () {
+                resolve(null);
+              }, function (err) {
+                if (err.status === 200) resolve(null);else resolve({
+                  'isUsernameUnique': true
+                });
+              });
+            }, 1000);
+          });
+          return q;
+        }
+      }, {
+        key: "validateEmail",
+        value: function validateEmail(control) {
+          var _this7 = this;
+
+          var q = new Promise(function (resolve, reject) {
+            setTimeout(function (res) {
+              _this7._authService.validateEmail(control.value).subscribe(function () {
+                resolve(null);
+              }, function (err) {
+                if (err.status === 200) resolve(null);else resolve({
+                  'isEmailUnique': true
+                });
+              });
+            }, 1000);
+          });
+          return q;
+        }
+      }, {
         key: "ngOnInit",
         value: function ngOnInit() {
           this.regisForm = this.fb.group({
             firstName: [""],
             lastName: [""],
-            email: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].email]],
-            username: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(5), Object(src_app_validators_forbiddenName_validator__WEBPACK_IMPORTED_MODULE_7__["forbiddenNameValidator"])(/admin|password/)]],
+            email: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].email], this.validateEmail.bind(this)],
+            username: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(5), Object(src_app_validators_forbiddenName_validator__WEBPACK_IMPORTED_MODULE_7__["forbiddenNameValidator"])(/admin|password/)], this.validateUsername.bind(this)],
             password: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(8), Object(src_app_validators_allowedname_validator__WEBPACK_IMPORTED_MODULE_6__["allowedNameValidator"])(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)]],
             confirmPassword: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required]
           }, {
@@ -1683,6 +1723,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           return this.http.post(this.header + "/login", user, {
             headers: headers
           }).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
+        }
+      }, {
+        key: "validateUsername",
+        value: function validateUsername(username) {
+          return this.http.get(this.header + "/users/checkusername/?username=" + username).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
+        }
+      }, {
+        key: "validateEmail",
+        value: function validateEmail(email) {
+          return this.http.get(this.header + "/users/checkemail/?email=" + email).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
         }
       }, {
         key: "isLoggedIn",

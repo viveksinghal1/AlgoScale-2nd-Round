@@ -28,6 +28,16 @@ export class AuthService {
 
   }
 
+  validateUsername(username): Observable<any> {
+    return this.http.get<any>(this.header+"/users/checkusername/?username="+username)
+    .pipe(catchError(this.errorHandler));
+  }
+
+  validateEmail(email): Observable<any> {
+    return this.http.get<any>(this.header+"/users/checkemail/?email="+email)
+    .pipe(catchError(this.errorHandler));
+  }
+
   isLoggedIn() {
     return !!this.getToken()  && !!this.getUsername();
   }

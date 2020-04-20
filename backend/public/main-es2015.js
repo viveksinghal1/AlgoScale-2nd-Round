@@ -764,6 +764,12 @@ let RegisterComponent = class RegisterComponent {
         else if (element.touched && errors.forbiddenName) {
             result = errors.forbiddenName.value + " username is not allowed";
         }
+        else if (element.hasError('isUsernameUnique')) {
+            result = "username already used. try another username.";
+        }
+        else if (element.hasError('isEmailUnique')) {
+            result = "email already used. try another email.";
+        }
         return result;
     }
     reset() {
@@ -788,12 +794,42 @@ let RegisterComponent = class RegisterComponent {
             });
         }
     }
+    validateUsername(control) {
+        const q = new Promise((resolve, reject) => {
+            setTimeout((res) => {
+                this._authService.validateUsername(control.value).subscribe(() => {
+                    resolve(null);
+                }, (err) => {
+                    if (err.status === 200)
+                        resolve(null);
+                    else
+                        resolve({ 'isUsernameUnique': true });
+                });
+            }, 1000);
+        });
+        return q;
+    }
+    validateEmail(control) {
+        const q = new Promise((resolve, reject) => {
+            setTimeout((res) => {
+                this._authService.validateEmail(control.value).subscribe(() => {
+                    resolve(null);
+                }, (err) => {
+                    if (err.status === 200)
+                        resolve(null);
+                    else
+                        resolve({ 'isEmailUnique': true });
+                });
+            }, 1000);
+        });
+        return q;
+    }
     ngOnInit() {
         this.regisForm = this.fb.group({
             firstName: [""],
             lastName: [""],
-            email: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].email]],
-            username: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(5), Object(src_app_validators_forbiddenName_validator__WEBPACK_IMPORTED_MODULE_7__["forbiddenNameValidator"])(/admin|password/)]],
+            email: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].email], this.validateEmail.bind(this)],
+            username: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(5), Object(src_app_validators_forbiddenName_validator__WEBPACK_IMPORTED_MODULE_7__["forbiddenNameValidator"])(/admin|password/)], this.validateUsername.bind(this)],
             password: ["", [_angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].minLength(8), Object(src_app_validators_allowedname_validator__WEBPACK_IMPORTED_MODULE_6__["allowedNameValidator"])(/^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$/)]],
             confirmPassword: ["", _angular_forms__WEBPACK_IMPORTED_MODULE_3__["Validators"].required]
         }, { validators: _validators_password_validator__WEBPACK_IMPORTED_MODULE_2__["PasswordValidator"] });
@@ -902,6 +938,14 @@ let AuthService = class AuthService {
         let headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_2__["HttpHeaders"]();
         headers.append("Content-Type", "application/json");
         return this.http.post(this.header + "/login", user, { headers })
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
+    }
+    validateUsername(username) {
+        return this.http.get(this.header + "/users/checkusername/?username=" + username)
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
+    }
+    validateEmail(email) {
+        return this.http.get(this.header + "/users/checkemail/?email=" + email)
             .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(this.errorHandler));
     }
     isLoggedIn() {
